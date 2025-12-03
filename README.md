@@ -10,10 +10,25 @@ This repository contains the source code and some guided activities to develop t
 
 *"oneTBB is a programming model for scalable parallel programming using standard ISO C++ code. A program uses oneTBB to specify logical parallelism in algorithms, while a oneTBB implementation maps that parallelism onto execution threads."* [oneTBB Api](https://oneapi-src.github.io/oneAPI-spec/elements/oneTBB/source/nested-index.html)
 
+### Or via docker
+
+Image 1 (173MB) https://hub.docker.com/r/mfisherman/onetbb
+```bash
+docker run --rm -it -v $(pwd):/project mfisherman/onetbb
+```
+
+Official Image (3Gb):
+```bash
+docker run -d -it --memory 2Gb --cpus 2 -v $(pwd)::/tmp --name mytbb intel/oneapi
+docker exec -it mytbb bash
+```
+
 ### How to run a project
 
 ```bash
 (example folder)$bazel run //:Demo
+
+g++ -g -std=c++17 main.cpp -pthread -ltbb
 ```
 
 #### Author [Isaac Lera](https://personal.uib.es/isaac.lera)

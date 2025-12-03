@@ -10,7 +10,7 @@ def run_saxpy(x,y,a):
 	return out
 
 if __name__ == "__main__":
-	size = 100000000
+	size = 10000
 	a = 2.1
 	
 	print(".")

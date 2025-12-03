@@ -30,6 +30,7 @@ int main() {
           for (int i=r.begin(); i!= r.end(); i++){
             double angle = std::atan2(i*dx, altitude[0]-altitude[i]);
             std::cout << angle << std::endl;
+            
             if (angle>=max_angle)
               max_angle = angle;
             if (is_final_scan && angle < max_angle)
