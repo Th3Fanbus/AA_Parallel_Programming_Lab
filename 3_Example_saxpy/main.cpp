@@ -37,7 +37,7 @@ int main()
 	tbb::tick_count t0 = tbb::tick_count::now();
 	ParallelSaxpy(a, &x[0], &y[0], &out[0], x.size());
 
-	cout << "Time: " << (tbb::tick_count::now() - t0).seconds() << "seconds" << endl;
+	cout << "Total time: " << (tbb::tick_count::now() - t0).seconds() << " seconds" << endl;
 
 	return 0;
 }

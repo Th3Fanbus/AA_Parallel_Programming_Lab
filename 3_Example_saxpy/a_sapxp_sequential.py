@@ -12,7 +12,7 @@ def run_saxpy(x,y,a):
 if __name__ == "__main__":
 	size = 10000000
 	a = 2.1
-	
+
 	print(".")
 	x = [random.random() for i in range(size)]
 	y = [random.random() for i in range(size)]
@@ -22,4 +22,4 @@ if __name__ == "__main__":
 	out = run_saxpy(x,y,a)
 	end = (time.time()-start)
 	print(out[:5])
-	print("Total time: %0.10f ms"%end)
+	print("Total time: %0.10f seconds"%end)

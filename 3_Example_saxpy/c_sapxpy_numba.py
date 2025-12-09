@@ -20,4 +20,4 @@ if __name__ == "__main__":
 	end = (time.time()-start)
 	
 	print(out[:5])
-	print("Total time: %0.10f ms"%end)
+	print("Total time: %0.10f seconds"%end)
