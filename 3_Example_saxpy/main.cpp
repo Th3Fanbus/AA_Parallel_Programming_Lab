@@ -25,11 +25,11 @@ void ParallelSaxpy(float a, float x[],  float y[], float z[], int n)
 
 int main()
 {
-	int size = 1000;
+	int size = 10000000;
+	float a = 2.1;
 	static vector<float> x(size);
 	static vector<float> y(size);
 	static vector<float> out(size);
-	float a = 2.1;
 
 	generate(x.begin(), x.end(), rand);
 	generate(y.begin(), y.end(), rand);
