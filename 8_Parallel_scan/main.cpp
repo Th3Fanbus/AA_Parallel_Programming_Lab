@@ -1,4 +1,4 @@
-//https://stackoverflow.com/questions/16557690/no-speedup-achieved-using-parallel-scan-component-of-intel-thread-building-block 
+//https://stackoverflow.com/questions/16557690/no-speedup-achieved-using-parallel-scan-component-of-intel-thread-building-block
 
 #include <iostream>
 #include <stdlib.h>
@@ -10,9 +10,10 @@
 
 using namespace std;
 using namespace oneapi;
+using namespace tbb;
 
 template <class T>
-class Body 
+class Body
 {
     T reduced_result;
     T* const y;
@@ -25,11 +26,11 @@ class Body
     T get_reduced_result() const {return reduced_result;}
 
     template<typename Tag>
-    void operator()( const blocked_range<int>& r, Tag ) 
+    void operator()( const blocked_range<int>& r, Tag )
     {
         T temp = reduced_result;
 
-        for( int i=r.begin(); i<r.end(); ++i ) 
+        for( int i=r.begin(); i<r.end(); ++i )
         {
             temp = temp+x[i];
             if( Tag::is_final_scan() )
@@ -41,20 +42,20 @@ class Body
 
     Body( Body& b, split ) : x(b.x), y(b.y), reduced_result(10) {}
 
-    void reverse_join( Body& a ) 
+    void reverse_join( Body& a )
     {
         reduced_result = a.reduced_result + reduced_result;
     }
 
-    void assign( Body& b ) 
-    {   
+    void assign( Body& b )
+    {
         reduced_result = b.reduced_result;
     }
 };
 
 
 template<class T>
-float DoParallelScan( T y[], const T x[], int n) 
+float DoParallelScan( T y[], const T x[], int n)
 {
     Body<int> body(y,x);
     tick_count t1,t2,t3,t4;
@@ -74,7 +75,7 @@ float SerialScan(T1 y[], const T1 x[], int n)
     t3=tick_count::now();
     T1 temp = 10;
 
-    for( int i=1; i<n; ++i ) 
+    for( int i=1; i<n; ++i )
     {
         temp = temp+x[i];
         y[i] = temp;
@@ -88,7 +89,7 @@ float SerialScan(T1 y[], const T1 x[], int n)
 
 int main()
 {
-    
+
     int y1[100000],x1[100000];
 
     for(int i=0;i<100000;i++)
@@ -101,4 +102,4 @@ int main()
     cout<<"\n parallel scan output is \t"<<DoParallelScan(y1,x1,100000)<<endl;
 
     return 0;
-} 
+}
