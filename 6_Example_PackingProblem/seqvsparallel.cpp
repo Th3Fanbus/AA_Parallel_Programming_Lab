@@ -43,7 +43,7 @@ public:
 	T get_sum() const { return sum; }
 
 	template<typename Tag>
-	void operator()(const blocked_range<int>& r, Tag)
+	void operator()(const blocked_range<size_t>& r, Tag)
 	{
 #if USE_OPTIMISED_LOOP
 		/**
@@ -51,12 +51,12 @@ public:
 		 * loop, but we need to have two separate loops.
 		 */
 		if (Tag::is_final_scan()) {
-			for (int i = r.begin(); i < r.end(); ++i) {
+			for (size_t i = r.begin(); i < r.end(); ++i) {
 				sum = sum + x[i];
 				y[i] = sum;
 			}
 		} else {
-			for (int i = r.begin(); i < r.end(); ++i) {
+			for (size_t i = r.begin(); i < r.end(); ++i) {
 				sum = sum + x[i];
 			}
 		}
@@ -65,7 +65,7 @@ public:
 		 * Less verbose, but \c Tag::is_final_scan() is
 		 * evaluated each and every iteration. Or is it?
 		 */
-		for (int i = r.begin(); i < r.end(); ++i) {
+		for (size_t i = r.begin(); i < r.end(); ++i) {
 			sum = sum + x[i];
 			if (Tag::is_final_scan()) {
 				y[i] = sum;
@@ -88,22 +88,22 @@ public:
 };
 
 template<typename T>
-T DoParallelScan(T y[], const T x[], int n)
+T DoParallelScan(T y[], const T x[], size_t n)
 {
 	Body<T> body(y, x);
 	const tick_count t0 = tick_count::now();
-	parallel_scan(blocked_range<int>(0, n), body);
+	parallel_scan(blocked_range<size_t>(0, n), body);
 	const tick_count t1 = tick_count::now();
 	cout << "Time Taken for parallel scan is: " << (t1 - t0).seconds() << endl;
 	return body.get_sum();
 }
 
 template<typename T>
-T DoSerialScan(T y[], const T x[], int n)
+T DoSerialScan(T y[], const T x[], size_t n)
 {
 	const tick_count t0 = tick_count::now();
 	T temp = 0;
-	for (int i = 0; i < n; ++i) {
+	for (size_t i = 0; i < n; ++i) {
 		temp = temp + x[i];
 		y[i] = temp;
 	}
@@ -117,15 +117,15 @@ T DoSerialScan(T y[], const T x[], int n)
  * and parallel scan operations. If the arrays do not fit in RAM then
  * performance will be awful and/or the program may get killed.
  */
-static const int ARRAY_SIZE = 1000000;
+static const size_t ARRAY_SIZE = 1000000;
 
 int main()
 {
 	/* For some reason, using very large C-style arrays causes segfaults in the loop */
 	std::vector<int> y1(ARRAY_SIZE), x1(ARRAY_SIZE);
 
-	for (int i = 0; i < ARRAY_SIZE; i++) {
-		x1[i] = i;
+	for (size_t i = 0; i < ARRAY_SIZE; i++) {
+		x1[i] = static_cast<int>(i & 0x7fffffff);
 	}
 
 	const int outSerial = DoSerialScan(y1.data(), x1.data(), ARRAY_SIZE);

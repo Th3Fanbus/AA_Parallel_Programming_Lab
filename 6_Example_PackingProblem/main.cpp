@@ -14,11 +14,11 @@ vector<int> doMAP(int a, int x[], int n)
 	vector<int> out(n);
 
 	tbb::parallel_for(
-		tbb::blocked_range<int>(0, n),
+		tbb::blocked_range<size_t>(0, n),
 
 		// lambda function
-		[&](tbb::blocked_range<int> r) {
-			for (auto i = r.begin(); i != r.end(); i++) {
+		[&](tbb::blocked_range<size_t> r) {
+			for (size_t i = r.begin(); i != r.end(); i++) {
 				out[i] = x[i] >= a;
 			}
 		}
@@ -26,14 +26,14 @@ vector<int> doMAP(int a, int x[], int n)
 	return out;
 }
 
-int doSCAN(int out[], const int in[], int n)
+int doSCAN(int out[], const int in[], size_t n)
 {
 	int total_sum = tbb::parallel_scan(
-		tbb::blocked_range<int>(0, n), // range
+		tbb::blocked_range<size_t>(0, n), // range
 		0, // id
-		[&](tbb::blocked_range<int> r, int sum, bool is_final_scan) {
+		[&](tbb::blocked_range<size_t> r, int sum, bool is_final_scan) {
 			int tmp = sum;
-			for (int i = r.begin(); i < r.end(); ++i) {
+			for (size_t i = r.begin(); i < r.end(); ++i) {
 				tmp = tmp + in[i];
 				if (is_final_scan) {
 					out[i] = tmp;
@@ -49,10 +49,10 @@ int doSCAN(int out[], const int in[], int n)
 }
 
 // doMAPFilter(&out[0],&ix[0],&x[0],&filter_results[0], x.size())
-void doMAPFilter(int bolMatch[], int ixMatch[], int x[], int out[], int n)
+void doMAPFilter(int bolMatch[], int ixMatch[], int x[], int out[], size_t n)
 {
 	tbb::parallel_for(
-		tbb::blocked_range<int>(0, n),
+		tbb::blocked_range<size_t>(0, n),
 		// lambda function
 		[&](tbb::blocked_range<int> r) {
 			for (auto i = r.begin(); i < r.end(); i++) {
@@ -66,7 +66,7 @@ void doMAPFilter(int bolMatch[], int ixMatch[], int x[], int out[], int n)
 
 int main()
 {
-	static int a = 10;
+	static size_t a = 10;
 	static vector<int> x{7, 1, 0, 13, 0, 15, 20, -1};
 
 	tbb::tick_count t0 = tbb::tick_count::now();
