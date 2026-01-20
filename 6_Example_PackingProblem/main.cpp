@@ -75,7 +75,7 @@ void doMap(OutArrT& out, const InArrT& in, FuncT&& func, size_t n)
  * @return The summary computed over the whole range
  */
 template<typename T, typename ArrT, typename InArrT, typename FuncT>
-T doScan(ArrT &out, const InArrT in, const T ident, FuncT&& func, size_t n)
+T doScan(ArrT &out, const InArrT& in, const T& ident, FuncT&& func, size_t n)
 {
 	return tbb::parallel_scan(
 		tbb::blocked_range<size_t>(0, n), // range
