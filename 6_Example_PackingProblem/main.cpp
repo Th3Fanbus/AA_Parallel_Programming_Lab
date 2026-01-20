@@ -138,8 +138,6 @@ void doFilter(ArrT& out, const ArrT& in, const BoolArrT& bolMatch, const IdxArrT
  * printed using the \c << operator of \c cout directly. Attempts to
  * pad values using \c setw() so that they remain aligned.
  *
- * Will also pad to ensure the
- *
  * @param vec   The vector to print the info of
  * @param name  The name to show for this vector
  */
